@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Code + Agent Router Setup</title>
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: #111827;
+      --panel-light: #162033;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #8b5cf6;
+      --primary-light: #a78bfa;
+      --border: #263244;
+      --code-bg: #050816;
+      --green: #22c55e;
+      --yellow: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #070b14;
+      border-right: 1px solid var(--border);
+      padding: 28px 22px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-bottom: 25px;
+    }
+
+    .sidebar nav a {
+      display: block;
+      color: var(--muted);
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .sidebar nav a:hover {
+      color: white;
+    }
+
+    .content {
+      margin-left: 260px;
+      width: calc(100% - 260px);
+      padding: 50px 32px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .hero {
+      padding: 36px;
+      background: linear-gradient(135deg, #111827, #161b2e);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      margin-bottom: 34px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      line-height: 1.2;
+      margin: 0 0 16px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 17px;
+      margin: 0;
+    }
+
+    .notice {
+      background: rgba(250, 204, 21, 0.08);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      color: #fde68a;
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    .step-label {
+      color: var(--primary-light);
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    ol, ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    code {
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 14px;
+      overflow-x: auto;
+      color: #dbeafe;
+      font-size: 14px;
+    }
+
+    .inline-code {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: white;
+    }
+
+    .success {
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #bbf7d0;
+      padding: 18px;
+      border-radius: 14px;
+      margin-top: 18px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 0 10px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+        padding: 28px 18px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="logo">Claude Code Setup</div>
+      <div class="badge">Dark Docs Style</div>
+
+      <nav>
+        <a href="#intro">Introduction</a>
+        <a href="#step-1">Step 1: API Key</a>
+        <a href="#step-2">Step 2: Node.js</a>
+        <a href="#step-3">Step 3: Install Claude Code</a>
+        <a href="#step-4">Step 4: Proxy Settings</a>
+        <a href="#step-5">Step 5: Launch and Test</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="container">
+
+        <div class="hero" id="intro">
+          <h1>How to Use Claude Code with Agent Router in VS Code for Free</h1>
+          <p>
+            This guide will show you how to install Anthropic's official Claude Code tool on Windows
+            and connect it through Agent Router so you can use your promotional API credits.
+          </p>
+        </div>
+
+        <div class="notice">
+          Reminder: Never share your API key publicly. Do not upload it to GitHub, screenshots, or public posts.
+        </div>
+
+        <section id="step-1">
+          <div class="step-label">Step 1</div>
+          <h2>Claim Your Free API Key</h2>
+
+          <ol>
+            <li>
+              Go to the
+              <a href="https://agentrouter.org/register?aff=DBnh" target="_blank">
+                Agent Router website
+              </a>.
+            </li>
+            <li>Sign in using your GitHub account to claim the $150 promotional credit.</li>
+            <li>Navigate to the API Token page.</li>
+            <li>
+              Create and copy your API key. It will look something like:
+              <span class="inline-code">sk-your-unique-key</span>
+            </li>
+          </ol>
+
+          <p>
+            Save this key because you will need it later in Step 4.
+          </p>
+        </section>
+
+        <section id="step-2">
+          <div class="step-label">Step 2</div>
+          <h2>Install Node.js</h2>
+
+          <p>
+            Claude Code requires Node.js to run on your computer.
+          </p>
+
+          <ol>
+            <li>Visit the official Node.js website.</li>
+            <li>Download the LTS version.</li>
+            <li>Run the installer.</li>
+            <li>Keep the default settings checked.</li>
+            <li>Finish the installation.</li>
+          </ol>
+        </section>
+
+        <section id="step-3">
+          <div class="step-label">Step 3</div>
+          <h2>Install Claude Code in VS Code</h2>
+
+          <p>
+            Windows may block some developer tools from installing through PowerShell.
+            Run this command first to allow script execution for your user account.
+          </p>
+
+          <pre><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+
+          <p>
+            After that, install Claude Code globally using npm:
+          </p>
+
+          <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+
+          <p>
+            Wait until the installation is fully completed before moving to the next step.
+          </p>
+        </section>
+
+        <section id="step-4">
+          <div class="step-label">Step 4</div>
+          <h2>Configure the Proxy Settings</h2>
+
+          <p>
+            Now, open the hidden Claude settings file by running this command in the VS Code terminal:
+          </p>
+
+          <pre><code>notepad $HOME\.claude\settings.json</code></pre>
+
+          <p>
+            If Notepad says the file or folder does not exist, run this first:
+          </p>
+
+          <pre><code>claude</code></pre>
+
+          <p>
+            Then press <span class="inline-code">Ctrl + C</span> to exit, and try opening the settings file again.
+          </p>
+
+          <p>
+            Once Notepad opens, delete everything inside and paste this configuration:
+          </p>
+
+          <pre><code>{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://agentrouter.org/",
+    "ANTHROPIC_AUTH_TOKEN": "sk-your-agentrouter-key",
+    "ANTHROPIC_MODEL": "claude-opus-4-6"
+  },
+  "alwaysThinkingEnabled": true,
+  "model": "claude-opus-4-6",
+  "effortLevel": "high"
+}</code></pre>
+
+          <p>
+            Replace <span class="inline-code">sk-your-agentrouter-key</span> with the actual API key you copied earlier.
+            Make sure your key stays inside the quotation marks.
+          </p>
+
+          <p>
+            Save the file using <span class="inline-code">Ctrl + S</span>, then close Notepad.
+          </p>
+        </section>
+
+        <section id="step-5">
+          <div class="step-label">Step 5</div>
+          <h2>Launch and Test Claude Code</h2>
+
+          <p>
+            Go back to your VS Code terminal and start Claude Code using this command:
+          </p>
+
+          <pre><code>claude --model claude-opus-4-6</code></pre>
+
+          <p>
+            If Claude Code asks you to set up terminal settings, choose:
+          </p>
+
+          <pre><code>1. Yes, use recommended settings</code></pre>
+
+          <p>
+            Then type:
+          </p>
+
+          <pre><code>hello</code></pre>
+
+          <div class="success">
+            If Claude replies to your greeting, your setup is working. You can now use Claude Code in VS Code through Agent Router using your available API credits.
+          </div>
+        </section>
+
+        <footer>
+          Credits to Aurelian for the original tutorial. This version was rewritten and simplified for easier setup.
+        </footer>
+
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>
