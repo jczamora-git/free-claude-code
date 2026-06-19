@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,7 +150,8 @@
       margin-bottom: 8px;
     }
 
-    ol, ul {
+    ol,
+    ul {
       padding-left: 22px;
     }
 
@@ -182,6 +184,57 @@
       padding: 2px 6px;
       border-radius: 6px;
       color: white;
+    }
+
+    .referral-warning {
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      border-left: 5px solid var(--yellow);
+      color: #fde68a;
+      padding: 20px;
+      border-radius: 14px;
+      margin: 18px 0 24px;
+    }
+
+    .referral-warning strong {
+      color: #ffffff;
+    }
+
+    .referral-warning p {
+      color: #fde68a;
+      margin: 8px 0 0;
+    }
+
+    .referral-link {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 11px 18px;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      border-radius: 9px;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .referral-link:hover {
+      background: var(--primary-light);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .required-tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 3px 9px;
+      background: rgba(250, 204, 21, 0.16);
+      border: 1px solid rgba(250, 204, 21, 0.35);
+      border-radius: 999px;
+      color: #fef08a;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
     }
 
     .success {
@@ -222,6 +275,12 @@
       .hero h1 {
         font-size: 30px;
       }
+
+      .referral-link {
+        display: block;
+        text-align: center;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -248,29 +307,66 @@
 
         <div class="hero" id="intro">
           <h1>How to Use Claude Code with Agent Router in VS Code for Free</h1>
+
           <p>
-            This guide will show you how to install Anthropic's official Claude Code tool on Windows
-            and connect it through Agent Router so you can use your promotional API credits.
+            This guide will show you how to install Anthropic's official
+            Claude Code tool on Windows and connect it through Agent Router
+            so you can use your promotional API credits.
           </p>
         </div>
 
         <div class="notice">
-          Reminder: Never share your API key publicly. Do not upload it to GitHub, screenshots, or public posts.
+          Reminder: Never share your API key publicly. Do not upload it to
+          GitHub, screenshots, or public posts.
         </div>
 
         <section id="step-1">
           <div class="step-label">Step 1</div>
           <h2>Claim Your Free API Key</h2>
 
+          <div class="referral-warning">
+            <span class="required-tag">Required Registration Link</span>
+
+            <div>
+              <strong>Important: Register using the link below.</strong>
+            </div>
+
+            <p>
+              You must create your Agent Router account through this specific
+              referral link to qualify for the $150 promotional credit.
+              Registering directly on the website without using this link may
+              prevent the promotional credit from being applied to your account.
+            </p>
+
+            <a
+              class="referral-link"
+              href="https://agentrouter.org/register?aff=DBnh"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Register through the required referral link
+            </a>
+          </div>
+
           <ol>
             <li>
-              Go to the
-              <a href="https://agentrouter.org/register?aff=DBnh" target="_blank">
-                Agent Router website
-              </a>.
+              Click the registration button above. Do not manually search for
+              or open the Agent Router registration page separately.
             </li>
-            <li>Sign in using your GitHub account to claim the $150 promotional credit.</li>
-            <li>Navigate to the API Token page.</li>
+
+            <li>
+              Sign in or register using your GitHub account.
+            </li>
+
+            <li>
+              After registration, confirm that the $150 promotional credit
+              has been applied to your account.
+            </li>
+
+            <li>
+              Navigate to the <strong>API Token</strong> page.
+            </li>
+
             <li>
               Create and copy your API key. It will look something like:
               <span class="inline-code">sk-your-unique-key</span>
@@ -278,7 +374,8 @@
           </ol>
 
           <p>
-            Save this key because you will need it later in Step 4.
+            Save your API key securely because you will need it later in
+            Step 4. Never share it publicly or include it in screenshots.
           </p>
         </section>
 
@@ -304,8 +401,9 @@
           <h2>Install Claude Code in VS Code</h2>
 
           <p>
-            Windows may block some developer tools from installing through PowerShell.
-            Run this command first to allow script execution for your user account.
+            Windows may block some developer tools from installing through
+            PowerShell. Run this command first to allow script execution for
+            your user account.
           </p>
 
           <pre><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
@@ -317,7 +415,8 @@
           <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
 
           <p>
-            Wait until the installation is fully completed before moving to the next step.
+            Wait until the installation is fully completed before moving to
+            the next step.
           </p>
         </section>
 
@@ -326,7 +425,8 @@
           <h2>Configure the Proxy Settings</h2>
 
           <p>
-            Now, open the hidden Claude settings file by running this command in the VS Code terminal:
+            Now, open the hidden Claude settings file by running this command
+            in the VS Code terminal:
           </p>
 
           <pre><code>notepad $HOME\.claude\settings.json</code></pre>
@@ -338,11 +438,13 @@
           <pre><code>claude</code></pre>
 
           <p>
-            Then press <span class="inline-code">Ctrl + C</span> to exit, and try opening the settings file again.
+            Then press <span class="inline-code">Ctrl + C</span> to exit, and
+            try opening the settings file again.
           </p>
 
           <p>
-            Once Notepad opens, delete everything inside and paste this configuration:
+            Once Notepad opens, delete everything inside and paste this
+            configuration:
           </p>
 
           <pre><code>{
@@ -357,12 +459,15 @@
 }</code></pre>
 
           <p>
-            Replace <span class="inline-code">sk-your-agentrouter-key</span> with the actual API key you copied earlier.
-            Make sure your key stays inside the quotation marks.
+            Replace
+            <span class="inline-code">sk-your-agentrouter-key</span>
+            with the actual API key you copied earlier. Make sure your key
+            stays inside the quotation marks.
           </p>
 
           <p>
-            Save the file using <span class="inline-code">Ctrl + S</span>, then close Notepad.
+            Save the file using
+            <span class="inline-code">Ctrl + S</span>, then close Notepad.
           </p>
         </section>
 
@@ -371,7 +476,8 @@
           <h2>Launch and Test Claude Code</h2>
 
           <p>
-            Go back to your VS Code terminal and start Claude Code using this command:
+            Go back to your VS Code terminal and start Claude Code using this
+            command:
           </p>
 
           <pre><code>claude --model claude-opus-4-6</code></pre>
@@ -389,12 +495,15 @@
           <pre><code>hello</code></pre>
 
           <div class="success">
-            If Claude replies to your greeting, your setup is working. You can now use Claude Code in VS Code through Agent Router using your available API credits.
+            If Claude replies to your greeting, your setup is working. You
+            can now use Claude Code in VS Code through Agent Router using
+            your available API credits.
           </div>
         </section>
 
         <footer>
-          Credits to Aurelian for the original tutorial. This version was rewritten and simplified for easier setup.
+          Credits to Aurelian for the original tutorial. This version was
+          rewritten and simplified for easier setup.
         </footer>
 
       </div>
@@ -403,3 +512,6 @@
   </div>
 </body>
 </html>
+```
+
+::: 
